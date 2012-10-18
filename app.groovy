@@ -42,7 +42,7 @@ def staticContext = new Context(server, "/")
 staticContext.setHandler(new ResourceHandler())
 staticContext.setResourceBase("./public")
 
-// Create servlet context and expose the router at 'localhost:8090/minibank/*'
+// Create servlet context and expose the router at 'localhost:8090/person/*'
 def root = new Context(server, "/", Context.SESSIONS)
 root.addServlet(new ServletHolder(groovlet), "/person/*")
 root.setResourceBase("./controllers")
