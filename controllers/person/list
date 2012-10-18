@@ -1,0 +1,76 @@
+import groovy.sql.*
+
+sql = new Sql(dataSource.connection)
+try {
+  people = sql.rows("select id, name from people order by id")
+} finally {
+  sql?.close()
+}
+
+println "<!DOCTYPE html>"
+html.html {
+  head {
+    meta([charset:'utf-8'])
+    title("Account holder list")
+    link([rel:"stylesheet", href:"/css/bootstrap.min.css"])
+  }
+  body {
+    div(class:'container') {
+      div(class:'navbar') {
+        div(class:'navbar-inner') {
+          a(class:'brand', href:'/') { mkp.yield "Minibank" }
+          ul(class:'nav') {
+            li(class:'active') {
+              a(href:'/person/list') { mkp.yield "Account holder list" }
+            }
+          }
+        }
+      }
+      div(class:'row') {
+        div(class:'span2') {
+          img(src:"/img/vault.gif")
+        }
+        div(class:'span10') {
+          h1 "List of account holders"
+          if (people.size() > 0) {
+            table(class:'table table-striped') {
+              thead {
+                tr {
+                  th "id"
+                  th "name"
+                  th "action"
+                }
+              }
+              tbody {
+                people.each { p ->
+                  tr {
+                    td p.id
+                    td p.name
+                    td {
+                      a(href:"/person/show?id=${p.id}") { mkp.yield "show" }
+                      a(href:"/person/edit?id=${p.id}") { mkp.yield "edit" }
+                      a(href:"/person/remove?id=${p.id}") { mkp.yield "remove" }
+                    }
+                  }
+                }
+              }
+            }
+          } else {
+            div(class:'alert alert-info', style:'margin-top:18px') {
+              strong "Oh My!"
+              mkp.yield "There aren't any account holders in the application right now."
+            }
+          }
+          p {
+            a(class:'btn btn-success', href:'/person/create') {
+              i(class:'icon-plus icon-white')
+              mkp.yield " Create new account holder"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// vim:ft=groovy

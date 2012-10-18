@@ -1,0 +1,29 @@
+import groovy.sql.*
+import groovy.text.*
+
+def engine = new GStringTemplateEngine()
+def gsp = new File("${System.getProperty('user.dir')}/views/person/edit.gsp")
+def pageTemplate = engine.createTemplate(gsp)
+def sql = new Sql(dataSource.connection)
+
+try {
+  def found = sql.firstRow('select id, name from people where id = ?', [params.id])
+  if (found) {
+    if (request.method == "GET") {
+      println pageTemplate.make([error:'', person:found])
+    } else {
+      if (params.personName) {
+        sql.executeUpdate('update people set name = ? where id = ?', [params.personName, found.id])
+        response.sendRedirect("/person/show?id=${found.id}")
+      } else {
+        println pageTemplate.make([error:"<strong>Oops!</strong> An account holder <strong>must</strong> have a name. <a style='color:#B94A48; text-decoration:underline;' href='/person/remove?id=${found.id}'>Click here if you wanted to delete this account holder.</a>", person:found])
+      }
+    }
+  } else {
+    response.sendRedirect('/person/list')
+  }
+} finally {
+  sql?.close()
+}
+
+// vim:ft=groovy

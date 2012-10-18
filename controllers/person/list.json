@@ -1,0 +1,14 @@
+import groovy.sql.*
+import groovy.json.*
+
+response.contentType = "application/json"
+
+sql = new Sql(dataSource.connection)
+try {
+  people = sql.rows("select id, name from people order by id")
+  print new JsonBuilder(people)
+} finally {
+  sql?.close()
+}
+
+// vim:ft=groovy

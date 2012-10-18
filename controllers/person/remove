@@ -1,0 +1,12 @@
+import groovy.sql.*
+
+sql = new Sql(dataSource.connection)
+try {
+  sql.executeUpdate("delete from people where id = ?", [params.id])
+} finally {
+  sql?.close()
+}
+
+response.sendRedirect('/person/list')
+
+// vim:ft=groovy

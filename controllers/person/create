@@ -1,0 +1,24 @@
+import groovy.sql.*
+import groovy.text.*
+
+def engine = new GStringTemplateEngine()
+def gsp = new File("${System.getProperty('user.dir')}/views/person/create.gsp")
+def pageTemplate = engine.createTemplate(gsp)
+
+if (request.method == "GET") {
+  println pageTemplate.make([error:''])
+} else {
+  if (params.personName) {
+    sql = new Sql(dataSource.connection)
+    try {
+      def generatedKeys = sql.executeInsert('insert into people (name) values (?)', [params.personName])
+      response.sendRedirect("/person/show?id=${generatedKeys.first().first()}")
+    } finally {
+      sql?.close()
+    }
+  } else {
+    println pageTemplate.make([error:"<strong>Oops!</strong> An account holder <strong>must</strong> have a name."])
+  }
+}
+
+// vim:ft=groovy
