@@ -29,9 +29,17 @@ try {
   sql?.close()
 }
 
+Person.dataSource = dataSource
+
 def server = new Server(8090)
 
 def groovlet = new GroovyServlet() {
+  @Override protected GroovyScriptEngine createGroovyScriptEngine() {
+    def gse = new GroovyScriptEngine(this, this.class.classLoader)
+    gse.config.sourceEncoding = "UTF-8" // force UTF-8 encoding when evaluating
+    gse
+  }
+
   @Override protected void setVariables(ServletBinding binding) {
     binding.setVariable('dataSource', dataSource)
   }

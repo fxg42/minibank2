@@ -1,11 +1,6 @@
 import groovy.sql.*
 
-sql = new Sql(dataSource.connection)
-try {
-  people = sql.rows("select id, name from people order by id")
-} finally {
-  sql?.close()
-}
+people = Person.findAll()
 
 println "<!DOCTYPE html>"
 html.html {
