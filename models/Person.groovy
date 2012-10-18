@@ -1,3 +1,5 @@
+package models
+
 import groovy.sql.*
 import groovy.transform.*
 

@@ -5,6 +5,7 @@
 import groovy.servlet.*
 import groovy.sql.*
 import java.util.logging.*
+import models.*
 import org.apache.commons.dbcp.*
 import org.mortbay.jetty.*
 import org.mortbay.jetty.handler.*
