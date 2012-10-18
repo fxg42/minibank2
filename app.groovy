@@ -11,7 +11,7 @@ import org.mortbay.jetty.*
 import org.mortbay.jetty.handler.*
 import org.mortbay.jetty.servlet.*
 
-def logger = Logger.getLogger(this.getClass().getCanonicalName())
+def logger = Logger.getLogger(this.class.canonicalName)
 
 def dataSource = new BasicDataSource()
 dataSource.setDriverClassName("org.apache.derby.jdbc.EmbeddedDriver")
